@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA COFFEE | Premium Kofe-Shop & Restoran</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0a0a0a',
+                        darkCard: '#141414',
+                        darkSurface: '#1f1616',
+                        crimson: '#dc2626',
+                        crimsonDark: '#991b1b',
+                        crimsonGlow: '#ef4444',
+                        goldAccent: '#d4af37'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'red-glow': '0 0 25px rgba(220, 38, 38, 0.35)',
+                        'red-glow-lg': '0 0 40px rgba(220, 38, 38, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .text-gradient-red {
+            background: linear-gradient(135deg, #ffffff 20%, #f87171 60%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-glass {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #991b1b;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body class="custom-scrollbar min-h-screen flex flex-col justify-between selection:bg-crimson selection:text-white">
+
+    <!-- NAVIGATION BAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-glass border-b border-red-950/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#home" onclick="navigateTo('home')" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-crimson to-black flex items-center justify-center border border-red-500/40 group-hover:shadow-red-glow transition-all">
+                    <i class="fa-solid font-bold fa-mug-hot text-xl text-white group-hover:scale-110 transition-transform"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-black tracking-wider text-white font-serif block leading-none">AURA</span>
+                    <span class="text-xs tracking-[0.25em] text-crimson font-semibold uppercase">Coffee & Lounge</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu Navigation -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm tracking-wide">
+                <button onclick="navigateTo('home')" id="nav-home" class="nav-btn text-white hover:text-crimson transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-house text-xs"></i> Bosh sahifa
+                </button>
+                <button onclick="navigateTo('about')" id="nav-about" class="nav-btn text-gray-400 hover:text-crimson transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-xs"></i> Biz haqimizda
+                </button>
+                <button onclick="navigateTo('menu')" id="nav-menu" class="nav-btn text-gray-400 hover:text-crimson transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-utensils text-xs"></i> Menyu & Aksiyalar
+                </button>
+                <button onclick="navigateTo('location')" id="nav-location" class="nav-btn text-gray-400 hover:text-crimson transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-xs"></i> Manzil & Xarita
+                </button>
+            </nav>
+
+            <!-- Actions & Cart Button -->
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCartDrawer()" class="relative p-3 rounded-xl bg-darkCard border border-red-900/30 hover:border-crimson hover:shadow-red-glow transition-all text-white">
+                    <i class="fa-solid fa-cart-shopping text-lg text-crimson"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 w-5 h-5 bg-crimson text-white text-xs font-bold rounded-full flex items-center justify-center">0</span>
+                </button>
+
+                <button onclick="navigateTo('menu')" class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-crimson to-crimsonDark hover:from-crimsonGlow hover:to-crimson text-white px-5 py-2.5 rounded-xl font-semibold shadow-red-glow transition-all duration-300">
+                    <i class="fa-solid fa-bolt"></i> Buyurtma
+                </button>
+
+                <!-- Mobile Hamburger Toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-300 hover:text-white focus:outline-none">
+                    <i id="menu-icon" class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-darkCard/95 border-b border-red-900/40 backdrop-blur-xl px-4 pt-3 pb-6 transition-all">
+            <div class="flex flex-col gap-4 text-base font-medium">
+                <button onclick="navigateTo('home'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-red-950/30 hover:text-crimson transition-all flex items-center gap-3">
+                    <i class="fa-solid fa-house w-5 text-crimson"></i> Bosh sahifa
+                </button>
+                <button onclick="navigateTo('about'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-red-950/30 hover:text-crimson transition-all flex items-center gap-3">
+                    <i class="fa-solid fa-circle-info w-5 text-crimson"></i> Biz haqimizda
+                </button>
+                <button onclick="navigateTo('menu'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-red-950/30 hover:text-crimson transition-all flex items-center gap-3">
+                    <i class="fa-solid fa-utensils w-5 text-crimson"></i> Menyu & Aksiyalar
+                </button>
+                <button onclick="navigateTo('location'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-red-950/30 hover:text-crimson transition-all flex items-center gap-3">
+                    <i class="fa-solid fa-location-dot w-5 text-crimson"></i> Manzil & Xarita
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20 flex-grow">
+
+        <!-- ================= PAGE 1: BOSH SAHIFA (HOME) ================= -->
+        <section id="page-home" class="page-view animate-fade-in">
+            <div class="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-darkBg via-darkSurface to-darkBg py-20 px-4">
+                <!-- Background Decorative Glows -->
+                <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-crimson/15 rounded-full blur-[140px] pointer-events-none"></div>
+                <div class="absolute bottom-10 right-10 w-80 h-80 bg-red-900/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                    <!-- Text Content -->
+                    <div class="space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-crimson/30 text-crimson text-xs font-bold uppercase tracking-widest">
+                            <i class="fa-solid fa-fire animate-pulse"></i> Toshkentdagi Premium Kofe Tajribasi
+                        </div>
+                        <h1 class="text-4xl sm:text-6xl font-black font-serif tracking-tight leading-tight">
+                            Har Bir Tomchida <br>
+                            <span class="text-gradient-red">Eksklyuziv Ta'm</span> & Rohat
+                        </h1>
+                        <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                            AURA COFFEE — bu shunchaki qahvaxona emas, balki Premium sinfdagi quyuq Arabica donachalari, xushbo'y hid va to'q qizil romantik abadiy muhit birlashgan maskan.
+                        </p>
+                        
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                            <button onclick="navigateTo('menu')" class="bg-gradient-to-r from-crimson to-crimsonDark hover:from-crimsonGlow hover:to-crimson text-white font-bold px-8 py-4 rounded-xl shadow-red-glow hover:shadow-red-glow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-3">
+                                <i class="fa-solid fa-mug-saucer"></i> Menyuni Ko'rish
+                            </button>
+                            <button onclick="navigateTo('location')" class="bg-darkCard hover:bg-darkSurface text-white border border-red-900/40 hover:border-crimson font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-3">
+                                <i class="fa-solid fa-map-pin text-crimson"></i> Manzilimiz
+                            </button>
+                        </div>
+
+                        <!-- Highlights Stats -->
+                        <div class="grid grid-cols-3 gap-4 pt-8 border-t border-red-950/60 max-w-lg mx-auto lg:mx-0">
+                            <div>
+                                <span class="text-2xl sm:text-3xl font-black text-white block">100%</span>
+                                <span class="text-xs text-gray-400">Eksport Arabica</span>
+                            </div>
+                            <div>
+                                <span class="text-2xl sm:text-3xl font-black text-crimson block">15+</span>
+                                <span class="text-xs text-gray-400">Mualliflik Kofelari</span>
+                            </div>
+                            <div>
+                                <span class="text-2xl sm:text-3xl font-black text-white block">4.9 ★</span>
+                                <span class="text-xs text-gray-400">Mijozlar Bahosi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Hero Feature Card -->
+                    <div class="relative flex justify-center">
+                        <div class="relative w-full max-w-md aspect-square rounded-3xl bg-gradient-to-br from-red-950/40 to-black p-4 border border-crimson/30 shadow-red-glow overflow-hidden group">
+                            <!-- SVG Decorative Coffee Visual -->
+                            <div class="w-full h-full rounded-2xl bg-darkCard flex flex-col items-center justify-center relative overflow-hidden p-6 text-center">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+                                <div class="w-48 h-48 rounded-full bg-crimson/20 flex items-center justify-center animate-pulse mb-4 border border-crimson/40">
+                                    <i class="fa-solid fa-mug-hot text-8xl text-crimson drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]"></i>
+                                </div>
+                                <div class="relative z-20 space-y-2">
+                                    <span class="text-xs font-bold text-crimson tracking-widest uppercase">Bugungi Tavsiya</span>
+                                    <h3 class="text-2xl font-bold font-serif text-white">Crimson Velvet Mocha</h3>
+                                    <p class="text-xs text-gray-400">To'q shokolad, qizil moruq va espresso sintezida tayyorlangan eksklyuziv ichimlik.</p>
+                                    <div class="pt-2">
+                                        <span class="text-xl font-extrabold text-white">45,000 UZS</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROMOTIONS (AKSIYALAR) PREVIEW -->
+            <section class="py-16 bg-darkCard/50 border-y border-red-950/40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                        <div>
+                            <span class="text-crimson font-bold text-sm tracking-widest uppercase">Eksklyuziv Takliflar</span>
+                            <h2 class="text-3xl sm:text-4xl font-serif font-bold text-white mt-1">Mavsumiy Aksiyalar</h2>
+                        </div>
+                        <button onclick="navigateTo('menu')" class="mt-4 md:mt-0 text-crimson hover:text-white font-semibold text-sm flex items-center gap-2 group">
+                            Barcha aksiyalarni ko'rish <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Promo 1 -->
+                        <div class="bg-gradient-to-br from-darkCard to-red-950/20 border border-red-900/30 rounded-2xl p-6 relative overflow-hidden group hover:border-crimson transition-all">
+                            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-crimson/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                            <span class="bg-crimson text-white text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Har kuni</span>
+                            <h3 class="text-xl font-bold text-white mt-4 mb-2">Ertalabki Combo</h3>
+                            <p class="text-gray-400 text-sm mb-4">Har kuni soat 08:00 dan 11:00 gacha har qanday Americano + Yangi Kuruassan uchun <strong class="text-crimson">20% chegirma</strong>.</p>
+                            <div class="text-xs font-semibold text-crimson flex items-center gap-1">
+                                <i class="fa-regular fa-clock"></i> 08:00 - 11:00
+                            </div>
+                        </div>
+
+                        <!-- Promo 2 -->
+                        <div class="bg-gradient-to-br from-darkCard to-red-950/20 border border-red-900/30 rounded-2xl p-6 relative overflow-hidden group hover:border-crimson transition-all">
+                            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-crimson/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                            <span class="bg-goldAccent text-black text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Seshanba & Payshanba</span>
+                            <h3 class="text-xl font-bold text-white mt-4 mb-2">Do'stlar Kuni</h3>
+                            <p class="text-gray-400 text-sm mb-4">2 ta Cappuccino yoki Latte xarid qiling va ikkinchi ichimlikka <strong class="text-crimson">50% chegirma</strong> oling!</p>
+                            <div class="text-xs font-semibold text-crimson flex items-center gap-1">
+                                <i class="fa-solid fa-users"></i> Juftliklar uchun
+                            </div>
+                        </div>
+
+                        <!-- Promo 3 -->
+                        <div class="bg-gradient-to-br from-darkCard to-red-950/20 border border-red-900/30 rounded-2xl p-6 relative overflow-hidden group hover:border-crimson transition-all">
+                            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-crimson/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                            <span class="bg-crimson text-white text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Talabalar uchun</span>
+                            <h3 class="text-xl font-bold text-white mt-4 mb-2">Student Special</h3>
+                            <p class="text-gray-400 text-sm mb-4">Student ID guvohnomasini ko'rsating va barcha salqin ichimliklarga <strong class="text-crimson">15% chegirma</strong>ga ega bo'ling.</p>
+                            <div class="text-xs font-semibold text-crimson flex items-center gap-1">
+                                <i class="fa-solid fa-graduation-cap"></i> Doimiy aksiya
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-crimson font-bold text-sm tracking-widest uppercase">Nega Aynan Aura?</span>
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-white mt-2">Nafosat va Sifat Uyg'unligi</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-darkCard p-8 rounded-2xl border border-red-950/60 hover:border-crimson/50 transition-all text-center group">
+                        <div class="w-16 h-16 rounded-2xl bg-red-950/50 text-crimson flex items-center justify-center text-3xl mx-auto mb-6 group-hover:bg-crimson group-hover:text-white transition-all shadow-red-glow">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">100% Organik Arabica</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Efiopiya va Kolumbiyadan keltirilgan saralangan kofe donalari faqat o'zimizda maxsus qovuriladi.</p>
+                    </div>
+
+                    <div class="bg-darkCard p-8 rounded-2xl border border-red-950/60 hover:border-crimson/50 transition-all text-center group">
+                        <div class="w-16 h-16 rounded-2xl bg-red-950/50 text-crimson flex items-center justify-center text-3xl mx-auto mb-6 group-hover:bg-crimson group-hover:text-white transition-all shadow-red-glow">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Xalqaro Baristalar</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Har bir stakan kofe sertifikatlangan, ko'p yillik tajribaga ega mohir baristalarimiz tomonidan tayyorlanadi.</p>
+                    </div>
+
+                    <div class="bg-darkCard p-8 rounded-2xl border border-red-950/60 hover:border-crimson/50 transition-all text-center group">
+                        <div class="w-16 h-16 rounded-2xl bg-red-950/50 text-crimson flex items-center justify-center text-3xl mx-auto mb-6 group-hover:bg-crimson group-hover:text-white transition-all shadow-red-glow">
+                            <i class="fa-solid fa-couch"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">To'q Qizil Atmosfera</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Shinam, sokin va estetik dizayndagi interyer — uchrashuvlar va xotirjam hordiq chiqarish uchun ideal.</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ================= PAGE 2: BIZ HAQIMIZDA (ABOUT) ================= -->
+        <section id="page-about" class="page-view hidden animate-fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                <!-- About Banner -->
+                <div class="bg-gradient-to-r from-darkCard via-red-950/30 to-darkCard border border-red-900/30 rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+                    <div class="max-w-2xl">
+                        <span class="text-crimson font-bold text-xs uppercase tracking-widest">Bizning Tarix</span>
+                        <h1 class="text-3xl sm:text-5xl font-serif font-bold text-white mt-2 mb-6">Sehrli Ta'm Ketidan Quvib...</h1>
+                        <p class="text-gray-300 leading-relaxed mb-4 text-sm sm:text-base">
+                            2021-yilda Toshkent markazida tashkil etilgan <strong>AURA COFFEE</strong> o'z oldiga birgina maqsadni qo'ygan edi: shahar ahliga haqiqiy premium kofe madaniyatini taqdim etish.
+                        </p>
+                        <p class="text-gray-400 leading-relaxed text-sm">
+                            Biz faqat eng sifatli kofe donalarini tanlaymiz va ularni maxsus haroratda qovuramiz. Bizning to'q qizil va qora rangdagi eksklyuziv interyerimiz mijozlarimizga unutilmas ilhom va sokinlik ulashadi.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Barista Team -->
+                <div>
+                    <div class="text-center mb-12">
+                        <span class="text-crimson font-bold text-xs uppercase tracking-widest">Mahorat Egalari</span>
+                        <h2 class="text-3xl font-serif font-bold text-white mt-1">Bizning Barista Jamoamiz</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-darkCard rounded-2xl overflow-hidden border border-red-950/60 hover:border-crimson transition-all text-center p-6">
+                            <div class="w-32 h-32 rounded-full bg-red-950/50 border-2 border-crimson mx-auto mb-4 flex items-center justify-center text-5xl text-crimson">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Jasur Rahimov</h3>
+                            <span class="text-xs text-crimson font-semibold uppercase">Bosh Barista & Ekspert</span>
+                            <p class="text-gray-400 text-xs mt-3">8 yillik tajribaga ega. Yevropa Kofe Chempionati sovrindori.</p>
+                        </div>
+
+                        <div class="bg-darkCard rounded-2xl overflow-hidden border border-red-950/60 hover:border-crimson transition-all text-center p-6">
+                            <div class="w-32 h-32 rounded-full bg-red-950/50 border-2 border-crimson mx-auto mb-4 flex items-center justify-center text-5xl text-crimson">
+                                <i class="fa-solid fa-user-ninja"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Malika Karimova</h3>
+                            <span class="text-xs text-crimson font-semibold uppercase">Latte-Art Ustasi</span>
+                            <p class="text-gray-400 text-xs mt-3">Mualliflik ichimliklari va murakkab ko'pik rasmlari bo'yicha mutaxassis.</p>
+                        </div>
+
+                        <div class="bg-darkCard rounded-2xl overflow-hidden border border-red-950/60 hover:border-crimson transition-all text-center p-6">
+                            <div class="w-32 h-32 rounded-full bg-red-950/50 border-2 border-crimson mx-auto mb-4 flex items-center justify-center text-5xl text-crimson">
+                                <i class="fa-solid fa-cookie-bite"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Sardor Alimov</h3>
+                            <span class="text-xs text-crimson font-semibold uppercase">Konditer-Shef</span>
+                            <p class="text-gray-400 text-xs mt-3">Fransuzcha va Yevropacha shirinliklar tayyorlash bo me'mori.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Values -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+                    <div class="bg-darkCard p-8 rounded-2xl border border-red-900/30 flex gap-4">
+                        <i class="fa-solid fa-heart-pulse text-3xl text-crimson mt-1"></i>
+                        <div>
+                            <h4 class="text-lg font-bold text-white mb-2">Sevgi Bilan Tayyorlangan</h4>
+                            <p class="text-gray-400 text-sm">Biz tayyorlaydigan har bir espresso shotida samimiyat va baristaning mehr-muhabbati mujassam.</p>
+                        </div>
+                    </div>
+                    <div class="bg-darkCard p-8 rounded-2xl border border-red-900/30 flex gap-4">
+                        <i class="fa-solid fa-leaf text-3xl text-crimson mt-1"></i>
+                        <div>
+                            <h4 class="text-lg font-bold text-white mb-2">Ekologik Mas'uliyat</h4>
+                            <p class="text-gray-400 text-sm">Biz biologik parchalnuvchi stakanlar va ekologik toza materiallardan foydalanamiz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: MENYU & AKSIYALAR (MENU) ================= -->
+        <section id="page-menu" class="page-view hidden animate-fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header Title & Filter -->
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-crimson font-bold text-xs uppercase tracking-widest">Eksklyuziv Ta'mlar</span>
+                    <h1 class="text-3xl sm:text-5xl font-serif font-bold text-white mt-1">Bizning Menyu</h1>
+                    <p class="text-gray-400 text-sm mt-2">O'zingizga yoqqan kategoriyani tanlang va sevimli kofengizga buyurtma bering.</p>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="flex flex-wrap items-center justify-center gap-3 mb-12">
+                    <button onclick="filterMenu('all')" class="menu-filter-btn active bg-crimson text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-red-glow" data-category="all">
+                        <i class="fa-solid fa-border-all mr-1"></i> Barchasi
+                    </button>
+                    <button onclick="filterMenu('hot')" class="menu-filter-btn bg-darkCard hover:bg-darkSurface text-gray-300 border border-red-900/30 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all" data-category="hot">
+                        <i class="fa-solid fa-mug-hot text-crimson mr-1"></i> Issiq Kofe
+                    </button>
+                    <button onclick="filterMenu('cold')" class="menu-filter-btn bg-darkCard hover:bg-darkSurface text-gray-300 border border-red-900/30 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all" data-category="cold">
+                        <i class="fa-solid fa-glass-water text-crimson mr-1"></i> Salqin Ichimliklar
+                    </button>
+                    <button onclick="filterMenu('dessert')" class="menu-filter-btn bg-darkCard hover:bg-darkSurface text-gray-300 border border-red-900/30 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all" data-category="dessert">
+                        <i class="fa-solid fa-cake-candles text-crimson mr-1"></i> Shirinliklar
+                    </button>
+                </div>
+
+                <!-- Menu Items Grid -->
+                <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Dynamic Menu Items Injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: MANZIL & XARITA (LOCATION) ================= -->
+        <section id="page-location" class="page-view hidden animate-fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="text-center max-w-2xl mx-auto">
+                    <span class="text-crimson font-bold text-xs uppercase tracking-widest">Tashrif Buyuring</span>
+                    <h1 class="text-3xl sm:text-5xl font-serif font-bold text-white mt-1">Bizning Manzil va Aloqa</h1>
+                    <p class="text-gray-400 text-sm mt-2">Biz Toshkent shahri markazida sizni kutib qolamiz.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Contact Cards -->
+                    <div class="space-y-6">
+                        <div class="bg-darkCard p-6 rounded-2xl border border-red-900/30 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-crimson/20 border border-crimson text-crimson flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Manzilimiz</h3>
+                                <p class="text-gray-400 text-sm mt-1">Toshkent shahri, Amir Temur shoh ko'chasi, 45-uy</p>
+                                <span class="text-xs text-crimson font-medium block mt-1">(Orientir: Oloy bozori ro'parasida)</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-darkCard p-6 rounded-2xl border border-red-900/30 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-crimson/20 border border-crimson text-crimson flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Ish Vaqti</h3>
+                                <p class="text-gray-400 text-sm mt-1">Dushanba - Yakshanba</p>
+                                <span class="text-white font-semibold text-sm block">08:00 — 23:00</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-darkCard p-6 rounded-2xl border border-red-900/30 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-crimson/20 border border-crimson text-crimson flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Telefon & Band Qilish</h3>
+                                <p class="text-gray-400 text-sm mt-1">+998 (71) 200-88-99</p>
+                                <p class="text-gray-400 text-sm">+998 (90) 123-45-67</p>
+                            </div>
+                        </div>
+
+                        <!-- Table Booking Button -->
+                        <button onclick="openTableModal()" class="w-full bg-gradient-to-r from-crimson to-crimsonDark hover:from-crimsonGlow hover:to-crimson text-white font-bold py-4 rounded-xl shadow-red-glow transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-utensils"></i> Stolni Band Qilish
+                        </button>
+                    </div>
+
+                    <!-- Map Graphic Container -->
+                    <div class="lg:col-span-2 bg-darkCard border border-red-900/30 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden min-h-[400px]">
+                        <!-- Interactive Simulated Map Layout -->
+                        <div class="w-full h-full rounded-xl bg-neutral-900 relative overflow-hidden flex items-center justify-center border border-red-950">
+                            <!-- SVG Styled Map Graphics -->
+                            <div class="absolute inset-0 opacity-30 bg-[radial-gradient(#dc2626_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                            
+                            <!-- Road Lines Mockup -->
+                            <div class="absolute w-full h-12 bg-neutral-800 top-1/2 -translate-y-1/2 rotate-12 border-y border-neutral-700"></div>
+                            <div class="absolute h-full w-12 bg-neutral-800 left-1/3 -translate-x-1/2 -rotate-12 border-x border-neutral-700"></div>
+
+                            <!-- Map Marker Pin -->
+                            <div class="relative z-10 text-center animate-bounce">
+                                <div class="w-16 h-16 rounded-full bg-crimson border-4 border-white flex items-center justify-center shadow-red-glow text-white text-2xl mx-auto">
+                                    <i class="fa-solid fa-mug-hot"></i>
+                                </div>
+                                <div class="bg-black/90 text-white border border-crimson px-3 py-1 rounded-lg text-xs font-bold mt-2 shadow-lg">
+                                    AURA COFFEE
+                                </div>
+                            </div>
+
+                            <!-- Real Map Link Overlay -->
+                            <div class="absolute bottom-4 right-4 z-20">
+                                <a href="https://maps.google.com" target="_blank" class="bg-crimson hover:bg-crimsonGlow text-white text-xs font-bold px-4 py-2 rounded-lg shadow-md flex items-center gap-2 transition-all">
+                                    <i class="fa-solid fa-diamond-turn-right"></i> Yandex / Google Xaritada Ochish
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SHOPPING CART DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity" onclick="toggleCartDrawer()"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-darkCard border-l border-red-900/40 text-white shadow-2xl flex flex-col">
+                <!-- Header -->
+                <div class="p-6 border-b border-red-900/30 flex items-center justify-between">
+                    <h2 class="text-xl font-bold font-serif flex items-center gap-2">
+                        <i class="fa-solid fa-basket-shopping text-crimson"></i> Sizning Savatingiz
+                    </h2>
+                    <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Items List -->
+                <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- Footer Summary & Checkout -->
+                <div class="p-6 border-t border-red-900/30 bg-black/40 space-y-4">
+                    <div class="flex justify-between text-base font-semibold">
+                        <span class="text-gray-400">Jami summasi:</span>
+                        <span id="cart-total" class="text-xl font-bold text-crimson">0 UZS</span>
+                    </div>
+                    <button onclick="checkoutOrder()" class="w-full bg-gradient-to-r from-crimson to-crimsonDark hover:from-crimsonGlow hover:to-crimson text-white font-bold py-3.5 rounded-xl shadow-red-glow transition-all">
+                        Buyurtmani Rasmiylashtirish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLE RESERVATION MODAL -->
+    <div id="table-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-darkCard border border-red-900/40 rounded-2xl max-w-md w-full p-6 relative text-white">
+            <button onclick="closeTableModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-2xl font-serif font-bold mb-2 text-crimson">Stolni Band Qilish</h3>
+            <p class="text-xs text-gray-400 mb-6">Tashrifingiz uchun eng shinam joyni oldindan rejalashtiring.</p>
+
+            <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Ismingiz</label>
+                    <input type="text" required placeholder="Ali Valiyev" class="w-full bg-black/50 border border-red-900/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-crimson text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Telefon Raqamingiz</label>
+                    <input type="tel" required placeholder="+998 90 123 45 67" class="w-full bg-black/50 border border-red-900/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-crimson text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Sana</label>
+                        <input type="date" required class="w-full bg-black/50 border border-red-900/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-crimson text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Mehmonlar Soni</label>
+                        <select class="w-full bg-black/50 border border-red-900/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-crimson text-white">
+                            <option>1 kishi</option>
+                            <option selected>2 kishi</option>
+                            <option>4 kishi</option>
+                            <option>6+ kishi</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-crimson hover:bg-crimsonGlow text-white font-bold py-3 rounded-xl transition-all shadow-red-glow mt-2">
+                    Tasdiqlash
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-darkCard border border-crimson text-white px-5 py-3 rounded-xl shadow-red-glow flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-crimson text-xl"></i>
+        <span id="toast-message" class="text-sm font-semibold">Xabar matni</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-red-950/60 pt-16 pb-8 text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <!-- Col 1 -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-crimson flex items-center justify-center text-white">
+                        <i class="fa-solid fa-mug-hot"></i>
+                    </div>
+                    <span class="text-2xl font-black font-serif text-white">AURA</span>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    Toshkentdagi unutilmas quyuq qora va to'q qizil romantik muhitga ega premium kofe-shop.
+                </p>
+            </div>
+
+            <!-- Col 2 -->
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Tezkor Havolalar</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#home" onclick="navigateTo('home')" class="hover:text-crimson transition-colors">Bosh Sahifa</a></li>
+                    <li><a href="#about" onclick="navigateTo('about')" class="hover:text-crimson transition-colors">Biz Haqimizda</a></li>
+                    <li><a href="#menu" onclick="navigateTo('menu')" class="hover:text-crimson transition-colors">Menyu va Aksiyalar</a></li>
+                    <li><a href="#location" onclick="navigateTo('location')" class="hover:text-crimson transition-colors">Manzilimiz</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3 -->
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Aksiyalar</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><span class="text-crimson font-medium">Combo Morning:</span> 08:00 - 11:00</li>
+                    <li><span class="text-crimson font-medium">Student Card:</span> -15% Chegirma</li>
+                    <li><span class="text-crimson font-medium">Seshanba:</span> 2x Cappuccino Special</li>
+                </ul>
+            </div>
+
+            <!-- Col 4 -->
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Ijtimoiy Tarmoqlar</h4>
+                <div class="flex gap-3">
+                    <a href="#" class="w-9 h-9 rounded-xl bg-darkCard border border-red-900/30 flex items-center justify-center text-white hover:bg-crimson transition-all">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-xl bg-darkCard border border-red-900/30 flex items-center justify-center text-white hover:bg-crimson transition-all">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-xl bg-darkCard border border-red-900/30 flex items-center justify-center text-white hover:bg-crimson transition-all">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-red-950/40 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-600 gap-4">
+            <p>© 2026 AURA COFFEE. Barcha huquqlar himoyalangan.</p>
+            <p>Designed with <i class="fa-solid fa-heart text-crimson"></i> for Coffee Lovers</p>
+        </div>
+    </footer>
+
+    <script>
+        // MENU DATABASE DATA
+        const menuData = [
+            { id: 1, name: "Espresso Noir", category: "hot", price: 25000, desc: "Sof va to'q quyuq Arabica shoti", icon: "fa-mug-hot", badge: "Bestseller" },
+            { id: 2, name: "Velvet Cappuccino", category: "hot", price: 35000, desc: "Nafis sut ko'pigi va shokolad upasi bilan", icon: "fa-mug-saucer", badge: null },
+            { id: 3, name: "Salted Caramel Latte", category: "hot", price: 42000, desc: "Sho'r karamel sousi va vanil surroget", icon: "fa-mug-saucer", badge: "Aksiya" },
+            { id: 4, name: "Crimson Mocha", category: "hot", price: 45000, desc: "To'q shokolad, qizil moruq va espresso", icon: "fa-fire", badge: "Eksklyuziv" },
+            { id: 5, name: "Iced Cold Brew Vanilla", category: "cold", price: 38000, desc: "12 soat davomida damlangan salqin kofe", icon: "fa-glass-water", badge: "Salqin" },
+            { id: 6, name: "Berry Crimson Tonic", category: "cold", price: 40000, desc: "Espresso, tonik va qizil rezavorlar sharbati", icon: "fa-wine-glass", badge: "Yangi" },
+            { id: 7, name: "Tiramisu Classico", category: "dessert", price: 48000, desc: "Italyancha an'anaviy kofe deserti", icon: "fa-cake-candles", badge: null },
+            { id: 8, name: "San Sebastian Cheesecake", category: "dessert", price: 52000, desc: "Issiq eritilgan shokolad sousi bilan", icon: "fa-cheese", badge: "Tavsiya" }
+        ];
+
+        // CART STATE
+        let cart = [];
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMenu('all');
+            handleHashNavigation();
+        });
+
+        // PAGE ROUTER NAVIGATION SYSTEM
+        function navigateTo(pageId) {
+            // Hide all page views
+            const pages = document.querySelectorAll('.page-view');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            // Show selected page view
+            const target = document.getElementById(`page-${pageId}`);
+            if(target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update Nav styling active state
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-crimson');
+                btn.classList.add('text-gray-400');
+            });
+            const activeNav = document.getElementById(`nav-${pageId}`);
+            if(activeNav) {
+                activeNav.classList.add('text-crimson');
+                activeNav.classList.remove('text-gray-400');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleHashNavigation() {
+            const hash = window.location.hash.replace('#', '');
+            if(['home', 'about', 'menu', 'location'].includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        }
+
+        // RENDER MENU ITEMS
+        function renderMenu(category) {
+            const menuGrid = document.getElementById('menu-grid');
+            const items = category === 'all' ? menuData : menuData.filter(i => i.category === category);
+
+            menuGrid.innerHTML = items.map(item => `
+                <div class="bg-darkCard border border-red-950/60 hover:border-crimson/60 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-red-glow group">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-red-950/40 border border-crimson/30 flex items-center justify-center text-crimson text-2xl group-hover:bg-crimson group-hover:text-white transition-all">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            ${item.badge ? `<span class="bg-crimson/20 border border-crimson/40 text-crimson text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">${item.badge}</span>` : ''}
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">${item.name}</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-4">${item.desc}</p>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-red-950/60">
+                        <span class="text-white font-extrabold text-base">${item.price.toLocaleString()} UZS</span>
+                        <button onclick="addToCart(${item.id})" class="bg-red-950/60 hover:bg-crimson text-crimson hover:text-white border border-crimson/40 p-2.5 rounded-xl transition-all">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // FILTER MENU BUTTONS
+        function filterMenu(category) {
+            document.querySelectorAll('.menu-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-crimson', 'text-white', 'shadow-red-glow');
+                btn.classList.add('bg-darkCard', 'text-gray-300');
+            });
+
+            const activeBtn = document.querySelector(`.menu-filter-btn[data-category="${category}"]`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-crimson', 'text-white', 'shadow-red-glow');
+                activeBtn.classList.remove('bg-darkCard', 'text-gray-300');
+            }
+
+            renderMenu(category);
+        }
+
+        // CART LOGIC
+        function addToCart(itemId) {
+            const item = menuData.find(i => i.id === itemId);
+            const existing = cart.find(i => i.id === itemId);
+
+            if(existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`${item.name} savatga qo'shildi!`);
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCountBadge = document.getElementById('cart-count');
+            const cartTotalSpan = document.getElementById('cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            cartCountBadge.textContent = totalItems;
+            cartTotalSpan.textContent = `${totalPrice.toLocaleString()} UZS`;
+
+            if(cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3 block"></i>
+                        <p class="text-sm">Savatingiz hozircha bo'sh</p>
+                    </div>
+                `;
+                return;
+            }
+
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between bg-black/40 p-3 rounded-xl border border-red-950">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">${item.name}</h4>
+                        <span class="text-xs text-crimson font-semibold">${(item.price * item.quantity).toLocaleString()} UZS</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeQuantity(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-darkCard border border-red-900/40 text-gray-300 flex items-center justify-center text-xs hover:border-crimson">-</button>
+                        <span class="text-xs font-bold text-white px-1">${item.quantity}</span>
+                        <button onclick="changeQuantity(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-darkCard border border-red-900/40 text-gray-300 flex items-center justify-center text-xs hover:border-crimson">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function changeQuantity(itemId, delta) {
+            const item = cart.find(i => i.id === itemId);
+            if(item) {
+                item.quantity += delta;
+                if(item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== itemId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function checkoutOrder() {
+            if(cart.length === 0) {
+                showToast("Savat bo'sh! Avval mahsulot tanlang.");
+                return;
+            }
+            cart = [];
+            updateCartUI();
+            toggleCartDrawer();
+            showToast("Rahmat! Buyurtmangiz qabul qilindi.");
+        }
+
+        // MODALS & TOAST
+        function openTableModal() {
+            document.getElementById('table-modal').classList.remove('hidden');
+        }
+
+        function closeTableModal() {
+            document.getElementById('table-modal').classList.add('hidden');
+        }
+
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+            closeTableModal();
+            showToast("Stol muvaffaqiyatli band qilindi!");
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgSpan = document.getElementById('toast-message');
+            msgSpan.textContent = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
